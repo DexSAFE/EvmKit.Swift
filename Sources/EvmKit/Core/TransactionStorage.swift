@@ -89,32 +89,6 @@ class TransactionStorage {
             }
         }
 
-        migrator.registerMigration("add addresses to TransactionTagRecord") { db in
-            try Transaction.deleteAll(db)
-            try InternalTransaction.deleteAll(db)
-
-            try db.alter(table: TransactionTagRecord.databaseTableName) { t in
-                t.add(column: TransactionTagRecord.Columns.addresses.name, .text)
-            }
-        }
-
-        migrator.registerMigration("recreate TransactionTagRecord") { db in
-            if try db.tableExists("transactionTag") {
-                try db.drop(table: "transactionTag")
-            }
-
-            try Transaction.deleteAll(db)
-            try InternalTransaction.deleteAll(db)
-
-            try db.create(table: TransactionTagRecord.databaseTableName) { t in
-                t.column(TransactionTagRecord.Columns.transactionHash.name, .blob).notNull()
-                t.column(TransactionTagRecord.Columns.type.name, .text).notNull()
-                t.column(TransactionTagRecord.Columns.protocol.name, .text)
-                t.column(TransactionTagRecord.Columns.contractAddress.name, .blob)
-                t.column(TransactionTagRecord.Columns.addresses.name, .text).notNull()
-            }
-        }
-
         return migrator
     }
 }
@@ -159,10 +133,6 @@ extension TransactionStorage {
                         if let contractAddress = tagQuery.contractAddress {
                             statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.contractAddress.name)' = ?")
                             arguments.append(contractAddress)
-                        }
-                        if let address = tagQuery.address {
-                            statements.append("LOWER(\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.addresses.name)') LIKE ?")
-                            arguments.append("%" + address + "%")
                         }
 
                         return "(\(statements.joined(separator: " AND ")))"
@@ -271,11 +241,6 @@ extension TransactionStorage {
                         if let contractAddress = tagQuery.contractAddress {
                             statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.contractAddress.name)' = ?")
                             arguments.append(contractAddress)
-                        }
-
-                        if let address = tagQuery.address {
-                            statements.append("LOWER(\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.addresses.name)') LIKE ?")
-                            arguments.append("%" + address + "%")
                         }
 
                         return "(\(statements.joined(separator: " AND ")))"

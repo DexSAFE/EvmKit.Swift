@@ -38,10 +38,10 @@ public extension ENSProvider {
 
 extension ENSProvider {
     class ResolverMethod: ContractMethod {
-        private let hash: Data32
+        private let hash: String
         private let method: String
 
-        init(hash: Data32, method: String) {
+        init(hash: String, method: String) {
             self.hash = hash
             self.method = method
         }

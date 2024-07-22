@@ -44,15 +44,11 @@ open class UnknownTransactionDecoration: TransactionDecoration {
         }
 
         var tags = [TransactionTag]()
-        var addresses = [fromAddress, toAddress]
-            .compactMap { $0 }
-            .filter { $0 != userAddress }
-            .map { $0.hex }
 
         if incomingValue > outgoingValue {
-            tags.append(TransactionTag(type: .incoming, protocol: .native, addresses: addresses))
+            tags.append(TransactionTag(type: .incoming, protocol: .native))
         } else if outgoingValue > incomingValue {
-            tags.append(TransactionTag(type: .outgoing, protocol: .native, addresses: addresses))
+            tags.append(TransactionTag(type: .outgoing, protocol: .native))
         }
 
         return tags

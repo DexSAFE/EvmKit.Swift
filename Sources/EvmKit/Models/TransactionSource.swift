@@ -106,4 +106,11 @@ public extension TransactionSource {
             type: .etherscan(apiBaseUrl: "https://api.ftmscan.com", txBaseUrl: "https://ftmscan.com", apiKey: apiKey)
         )
     }
+    
+    static func dexnet(apiKey: String) -> TransactionSource {
+        TransactionSource(
+            name: "ftmscan.com",
+            type: .etherscan(apiBaseUrl: "https://explorer.dexnetchain.com/api/v2", txBaseUrl: "https://explorer.dexnetchain.com", apiKey: apiKey)
+        )
+    }
 }

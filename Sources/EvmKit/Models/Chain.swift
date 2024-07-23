@@ -164,4 +164,14 @@ public extension Chain {
             isEIP1559Supported: false
         )
     }
+    
+    static var dexnet: Chain {
+        Chain(
+            id: 18950,
+            coinType: 60,
+            syncInterval: 15,
+            gasLimit: 80_000_000,
+            isEIP1559Supported: false
+        )
+    }
 }
